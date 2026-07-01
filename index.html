@@ -88,7 +88,6 @@ tr:hover td{background:color-mix(in srgb,var(--accent) 8%, transparent)}
 <main class="container">
 
   <section class="grid filters">
-    <div><label>Data-base</label><input id="baseDate" type="date"></div>
     <div><label>Tipo</label><select id="tipoFilter"></select></div>
     <div><label>ZP</label><select id="zpFilter"></select></div>
     <div><label>Faixa etária</label><select id="idadeFilter"></select></div>
@@ -167,8 +166,7 @@ function enrich(row, baseDate) {
   return {...row, idade: age, faixa_idade: ageBand(age), tempo_servico: service, faixa_servico: serviceBand(service), decada: decade(ano), inconsistente: row.status_dado !== 'OK' || invalidYear };
 }
 function currentBaseDate() {
-  const v = $('baseDate').value;
-  return v ? new Date(v+'T12:00:00') : new Date();
+  return new Date();
 }
 function getData() { return RAW_DATA.map(r => enrich(r, currentBaseDate())).filter(r => !r.inconsistente); }
 function unique(arr) { return [...new Set(arr)].filter(x => x !== undefined && x !== null).sort((a,b)=>Number(a)-Number(b)); }
@@ -191,7 +189,6 @@ function localTodayISO() {
   return `${y}-${m}-${d}`;
 }
 function setupControls() {
-  $('baseDate').value = localTodayISO();
   const zps = unique(RAW_DATA.map(r => r.zp));
   $('tipoFilter').innerHTML = '<option value="Todos">Todos</option><option>Prático</option><option>Praticante</option>';
   $('zpFilter').innerHTML = '<option value="Todas">Todas</option>' + zps.map(z=>`<option value="${z}">ZP ${z}</option>`).join('');
@@ -199,7 +196,7 @@ function setupControls() {
   $('servicoFilter').innerHTML = '<option value="Todos">Todos</option>' + SERVICE_BANDS.map(x=>`<option>${x}</option>`).join('');
   $('sortSelect').innerHTML = `
     <option value="zp_nome">ZP + nome</option><option value="nome">Nome</option><option value="idade_desc">Maior idade</option><option value="idade_asc">Menor idade</option><option value="servico_desc">Maior tempo de serviço</option><option value="ano_asc">Ano início mais antigo</option><option value="ano_desc">Ano início mais recente</option>`;
-  ['baseDate','tipoFilter','zpFilter','idadeFilter','servicoFilter','searchInput','sortSelect'].forEach(id => $(id).addEventListener('input', render));
+  ['tipoFilter','zpFilter','idadeFilter','servicoFilter','searchInput','sortSelect'].forEach(id => $(id).addEventListener('input', render));
   $('clearBtn').addEventListener('click', () => {
     $('tipoFilter').value='Todos'; $('zpFilter').value='Todas'; $('idadeFilter').value='Todas'; $('servicoFilter').value='Todos'; $('searchInput').value=''; $('sortSelect').value='zp_nome'; render();
   });
