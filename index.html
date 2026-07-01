@@ -183,9 +183,15 @@ function avgBy(rows, groupKey, valKey) {
   rows.forEach(r => { const v=r[valKey]; if(typeof v==='number'&&!Number.isNaN(v)) { const k=r[groupKey]; if(!m.has(k)) m.set(k,[]); m.get(k).push(v); } });
   return [...m.entries()].map(([label,vals])=>({label,value:avg(vals)}));
 }
-function setupControls() {
+function localTodayISO() {
   const today = new Date();
-  $('baseDate').value = today.toISOString().slice(0,10);
+  const y = today.getFullYear();
+  const m = String(today.getMonth() + 1).padStart(2, '0');
+  const d = String(today.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+function setupControls() {
+  $('baseDate').value = localTodayISO();
   const zps = unique(RAW_DATA.map(r => r.zp));
   $('tipoFilter').innerHTML = '<option value="Todos">Todos</option><option>Prático</option><option>Praticante</option>';
   $('zpFilter').innerHTML = '<option value="Todas">Todas</option>' + zps.map(z=>`<option value="${z}">ZP ${z}</option>`).join('');
@@ -263,10 +269,10 @@ function renderCharts(rows) {
 }
 function renderInsights(rows) { return; }
 function renderHeatmap(rows) {
-  const zps = countBy(rows.filter(r=>r.tipo==='Prático'),'zp').sort((a,b)=>b.value-a.value).slice(0,12).map(x=>x.label);
-  const max = Math.max(1, ...zps.flatMap(z => AGE_BANDS.map(b => rows.filter(r=>r.zp==z && r.faixa_idade===b && r.tipo==='Prático').length)));
+  const zps = [...new Set(rows.filter(r=>r.tipo==='Prático').map(r=>Number(r.zp)))].sort((a,b)=>a-b);
+  const max = Math.max(1, ...zps.flatMap(z => AGE_BANDS.map(b => rows.filter(r=>Number(r.zp)===z && r.faixa_idade===b && r.tipo==='Prático').length)));
   let html = `<div class="heat-row"><div></div>${AGE_BANDS.map(b=>`<div class="heat-head">${b}</div>`).join('')}</div>`;
-  html += zps.map(z=>`<div class="heat-row"><div class="heat-zp">ZP ${z}</div>${AGE_BANDS.map(b=>{ const v=rows.filter(r=>r.zp==z && r.faixa_idade===b && r.tipo==='Prático').length; const alpha = v? (0.15 + (v/max)*0.75) : 0; return `<div class="heat-cell" style="background:color-mix(in srgb, var(--accent) ${Math.round(alpha*100)}%, var(--surface2));">${v||''}</div>`; }).join('')}</div>`).join('');
+  html += zps.map(z=>`<div class="heat-row"><div class="heat-zp">ZP ${String(z).padStart(2,'0')}</div>${AGE_BANDS.map(b=>{ const v=rows.filter(r=>Number(r.zp)===z && r.faixa_idade===b && r.tipo==='Prático').length; const alpha = v? (0.15 + (v/max)*0.75) : 0; return `<div class="heat-cell" style="background:color-mix(in srgb, var(--accent) ${Math.round(alpha*100)}%, var(--surface2));">${v||''}</div>`; }).join('')}</div>`).join('');
   $('heatmap').innerHTML = html || '<div class="small">Sem dados.</div>';
 }
 function renderTable(rows) {
