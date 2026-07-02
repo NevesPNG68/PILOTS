@@ -22,7 +22,7 @@ html{scroll-behavior:smooth}
 body{margin:0;min-height:100vh;background:radial-gradient(circle at 20% 0%, rgba(25,168,148,.16), transparent 32%),linear-gradient(145deg,var(--cyan) 0%,var(--bg) 46%,#fff8df 100%);color:var(--text);font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;}
 body.dark{background:radial-gradient(circle at 20% 0%, rgba(41,201,179,.18), transparent 34%),linear-gradient(145deg,#10131c 0%,#151925 48%,#221f16 100%)}
 .container{max-width:1480px;margin:0 auto;padding:24px 28px 34px}
-.header{position:sticky;top:0;z-index:20;background:color-mix(in srgb, var(--surface) 74%, transparent);backdrop-filter: blur(18px);border-bottom:1px solid var(--border);}
+.header{background:color-mix(in srgb, var(--surface) 74%, transparent);backdrop-filter: blur(18px);border-bottom:1px solid var(--border);}
 .header-inner{max-width:1480px;margin:0 auto;padding:16px 28px;display:flex;gap:18px;align-items:center;justify-content:space-between;}
 .brand{display:flex;flex-direction:column;gap:4px;position:relative;padding-left:48px}
 .brand:before{content:"";position:absolute;left:0;top:50%;width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 50% 50%,#fff 0 28%,var(--ink) 30% 58%,var(--warn) 60% 68%,var(--ink) 70%);transform:translateY(-50%);box-shadow:0 10px 24px rgba(0,0,0,.18)}
@@ -64,7 +64,7 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 4px color-m
 .table-wrap{overflow:auto;border-radius:8px;border:1px solid var(--border)}
 table{width:100%;border-collapse:collapse;background:var(--surface);font-size:13px;}
 th,td{padding:12px 11px;border-bottom:1px solid var(--border);text-align:left;vertical-align:middle;white-space:nowrap}
-th{position:sticky;top:0;background:var(--ink);z-index:2;color:#fff;font-size:11px;text-transform:uppercase;letter-spacing:.04em;cursor:pointer}
+th{background:var(--ink);color:#fff;font-size:11px;text-transform:uppercase;letter-spacing:.04em;cursor:pointer}
 tr:hover td{background:color-mix(in srgb,var(--accent) 8%, transparent)}
 .badge{display:inline-flex;padding:5px 9px;border-radius:7px;background:var(--chip);font-weight:850;font-size:12px;align-items:center;gap:5px}
 .badge.warn{background:color-mix(in srgb,var(--warn) 20%, var(--surface));color:color-mix(in srgb,var(--warn) 80%, var(--text))}
